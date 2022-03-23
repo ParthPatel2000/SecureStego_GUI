@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureStego", "SecureStego.csproj", "{8C797F1A-E52A-445D-A627-7C6385DBBF51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C797F1A-E52A-445D-A627-7C6385DBBF51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C797F1A-E52A-445D-A627-7C6385DBBF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C797F1A-E52A-445D-A627-7C6385DBBF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C797F1A-E52A-445D-A627-7C6385DBBF51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53E84704-7929-44AA-9641-300FA1C79C10}
+	EndGlobalSection
+EndGlobal
