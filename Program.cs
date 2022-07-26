@@ -8,9 +8,7 @@ namespace SecureStego
 {
     static class Program
     {
-        /// <summary>
         ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -18,7 +16,7 @@ namespace SecureStego
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
-            Application.Run(new Main());
+            Application.Run(new Main());    // calling main method from Form1.cs
         }
     }
 }
