@@ -72,7 +72,11 @@ namespace SecureStego
             FileLocation = @"Program.cs";
             FullPath = Path.GetFullPath(FileLocation);
             RootDirectory = FullPath.Substring(0,FullPath.IndexOf("Secure"));
-            cmdPath = RootDirectory.Replace(@"\", @"\\");
+            cmdPath = String.Concat((RootDirectory.Replace(@"\", @"\\")), "SecureStegoBackEnd\\venv\\Scripts");
+            // MessageBox.Show(FileLocation);
+            // MessageBox.Show(FullPath);
+            // MessageBox.Show(RootDirectory);
+            // MessageBox.Show(cmdPath);
         }
 
         //
@@ -84,7 +88,6 @@ namespace SecureStego
         // For dragging the window
         //
         private bool _dragging = false;
-        private Point _offset;
         private Point _start_point = new Point(0, 0);
 
         //
@@ -298,7 +301,7 @@ namespace SecureStego
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
-            cmd.StandardInput.WriteLine("cd "+cmdPath+"Secure Stego FINAL\\SecureStegoBackEnd\\venv\\Scripts");  // Give path of your Scripts in venv
+            cmd.StandardInput.WriteLine("cd "+cmdPath);  // Give path of your Scripts in venv
             // Change path accordingly from D:\\...\\GUI\\ with your drive or folder path
             cmd.StandardInput.Flush();
             cmd.StandardInput.WriteLine("activate.bat");
@@ -320,8 +323,7 @@ namespace SecureStego
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
-
-            cmd.StandardInput.WriteLine("cd "+cmdPath+"Secure Stego FINAL\\SecureStegoBackEnd\\venv\\Scripts");  // Give path of your Scripts in venv
+            cmd.StandardInput.WriteLine("cd "+cmdPath);  // Give path of your Scripts in venv
             // Change path accordingly from D:\\...\\GUI\\ with your drive or folder path
             cmd.StandardInput.Flush();
             cmd.StandardInput.WriteLine("activate.bat");
@@ -345,8 +347,7 @@ namespace SecureStego
             }
             cmd.StandardInput.Close();
             cmd.WaitForExit();
-            return Int16.Parse(line);
-
+            return int.Parse(line);
         }
 
 
@@ -359,6 +360,7 @@ namespace SecureStego
         private String stegoPath = "";      // stores path of generated stego image
         private String ip = "";             // stores ip address
         private String topic = "";          // stores topic name
+        private bool condition = true;
 
 
         //
@@ -367,9 +369,15 @@ namespace SecureStego
         private void SaveData()
         {
             string data = "environment:\n  cover_image: " + imagePath + "\n  receive_path: "+ stegoPath +"\n  send_path: ../Sender Data/ \nkafka:\n  bootstrap_servers: " + ip + "\n  topic: " + topic + "\nkey: " + key;
-            var path = $@"{RootDirectory}Secure Stego FINAL\SecureStegoBackEnd\config.yaml";	// Give path of SecureStegoBackEnd and save a config.yaml
+            var path = $@"{RootDirectory}SecureStegoBackEnd\config.yaml";	// Give path of SecureStegoBackEnd and save a config.yaml
             // Change path accordingly from D:\../\GUI\ with your drive or folder path
-            File.WriteAllText(path, data);
+            try {
+                File.WriteAllText(path, data);
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                MessageBox.Show("Oops an Error Occured. The error is: "+ex);
+            }
         }
 
 
@@ -383,6 +391,7 @@ namespace SecureStego
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 imagePath = ofd.FileName;
+                MessageBox.Show("Selected Image is at: "+imagePath);
                 ImageBox1.ImageLocation = imagePath;
             }
             SaveData();
@@ -391,7 +400,7 @@ namespace SecureStego
         private void BtnSaveMsg1_Click(object sender, EventArgs e)
         {
             message = MessageBox1.Text;
-            var path = $@"{RootDirectory}Secure Stego FINAL\SecureStegoBackEnd\Message.txt";	// Give path of SecureStegoBackEnd and save Message.txt
+            var path = $@"{RootDirectory}SecureStegoBackEnd\Message.txt";	// Give path of SecureStegoBackEnd and save Message.txt
             // Change path accordingly from D:\...\GUI\ with your drive or folder path
             File.WriteAllText(path, message);
         }
@@ -416,9 +425,15 @@ namespace SecureStego
             if (imagePath!="" && message!="" && key!="" && key.Length>=4)
             {
                 pythonFileName = "python insert.py";
-                RunScript(pythonFileName);
+                try { RunScript(pythonFileName); }
+                catch (Exception ex) 
+                { 
+                    MessageBox.Show("Oops Some Error Occured. Closing this app !"+ex);
+                    this.Close();
+                }
+                
                 // Display at DispStegoImage box and stego image path to label 15
-                stegoPath = $@"{RootDirectory}Secure Stego FINAL\Sender Data\stg.PNG"; // Save Stego Image to Path given
+                stegoPath = $@"{RootDirectory}Sender Data\stg.PNG"; // Save Stego Image to Path given
                 // Change path accordingly from D:\...\GUI\ with your drive or folder path
                 DispStegoImg.ImageLocation = stegoPath;
                 BtnStegoImage.PerformClick();
@@ -446,7 +461,16 @@ namespace SecureStego
 
         private void BtnDownStegoImage_Click(object sender, EventArgs e)
         {
-            Label15.Text = $"\tPath of saved stego picture is: \n {RootDirectory}Secure Stego FINAL\\Sender Data";
+            if (condition == true)
+            {
+                MessageBox.Show("Stego Image is saved at: " + stegoPath);
+                condition = false;
+            }
+            else
+            {
+                MessageBox.Show("Image Already Saved");
+                BtnDownStegoImage.Visible = false;
+            }
         }
 
         private void BtnOk1_Click(object sender, EventArgs e)
@@ -487,7 +511,8 @@ namespace SecureStego
         {
             ip = IpBox2.Text;
             topic = TopicBox2.Text;
-            stegoPath = $@"{RootDirectory}Secure Stego FINAL\Received Data\rec.PNG";
+            stegoPath = $@"{RootDirectory}Received Data\rec.PNG";
+            MessageBox.Show("Stego Image is selected from: " + stegoPath);
             SaveData();
             if (IpBox2.Text!="" && TopicBox2.Text!="")
             {
@@ -513,7 +538,7 @@ namespace SecureStego
             }
             // display recieved stego image
             
-            ImageBox2.ImageLocation = $@"{RootDirectory}Secure Stego FINAL/Received Data/rec.PNG";	// Save Stego Image to SecureStegoBackEnd recieved from Kafka
+            ImageBox2.ImageLocation = $@"{RootDirectory}Received Data\rec.PNG";	// Save Stego Image to SecureStegoBackEnd recieved from Kafka
             // Change path accordingly from D:\...\GUI\ with your drive or folder path
             Process[] workers = Process.GetProcessesByName("Python");
             foreach (Process worker in workers)
@@ -537,11 +562,6 @@ namespace SecureStego
             SaveData();
         }
 
-        private void BtnSaveImg2_Click(object sender, EventArgs e)
-        {
-            // display path of downloaded stego image
-            //PicturePath2.Text = "Path of saved stego picture is: \n" + stegoPath ;
-        }
 
         private void ShowKey2_Click(object sender, EventArgs e)
         {
@@ -565,7 +585,7 @@ namespace SecureStego
                 int return_code = RunScript_returncode(pythonFileName,10);
                 if(return_code == 1)
                 {
-                    var path = $@"{RootDirectory}Secure Stego FINAL\Received Data\recieved.txt";
+                    var path = $@"{RootDirectory}Received Data\recieved.txt";
                     // Change path accordingly from D:\...\GUI\ with your drive or folder path
                     Label12.Text = "The Message is saved to text file :\n at \n" + path;
                     BtnRecMsg.PerformClick();
@@ -588,9 +608,10 @@ namespace SecureStego
             }
         }
 
+
         private void BtnSaveMsg2_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", $@"{RootDirectory}Secure Stego FINAL\Received Data\recieved.txt");
+            Process.Start("notepad.exe", $@"{RootDirectory}Received Data\recieved.txt");
             // Change path accordingly from D:\...\GUI\ with your drive or folder path
         }
 
