@@ -99,7 +99,6 @@ namespace SecureStego
             this.AboutPanel = new System.Windows.Forms.Panel();
             this.Label13 = new System.Windows.Forms.Label();
             this.StegoImgPanel = new System.Windows.Forms.Panel();
-            this.Label15 = new System.Windows.Forms.Label();
             this.BtnDownStegoImage = new System.Windows.Forms.Button();
             this.DispStegoImg = new System.Windows.Forms.PictureBox();
             this.Label16 = new System.Windows.Forms.Label();
@@ -732,18 +731,11 @@ namespace SecureStego
             // StegoImgPanel
             // 
             this.StegoImgPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(184)))), ((int)(((byte)(61)))));
-            this.StegoImgPanel.Controls.Add(this.Label15);
             this.StegoImgPanel.Controls.Add(this.BtnDownStegoImage);
             this.StegoImgPanel.Controls.Add(this.DispStegoImg);
             this.StegoImgPanel.Controls.Add(this.Label16);
             resources.ApplyResources(this.StegoImgPanel, "StegoImgPanel");
             this.StegoImgPanel.Name = "StegoImgPanel";
-            // 
-            // Label15
-            // 
-            resources.ApplyResources(this.Label15, "Label15");
-            this.Label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(101)))), ((int)(((byte)(47)))));
-            this.Label15.Name = "Label15";
             // 
             // BtnDownStegoImage
             // 
@@ -887,7 +879,6 @@ namespace SecureStego
         private System.Windows.Forms.Button BtnSaveMsg2;
         private System.Windows.Forms.Button BtnStegoImage;
         private System.Windows.Forms.Panel StegoImgPanel;
-        private System.Windows.Forms.Label Label15;
         private System.Windows.Forms.Button BtnDownStegoImage;
         private System.Windows.Forms.PictureBox DispStegoImg;
         private System.Windows.Forms.Label Label16;
